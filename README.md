@@ -1,4 +1,4 @@
-# youtube-meetup-vuejs
+# meetup-vuejs
 
 ## Project setup
 ```
