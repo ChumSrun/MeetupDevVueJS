@@ -106,6 +106,7 @@
 
 <script>
 export default {
+  name: "CreateMeetup",
   data() {
     return {
       title: "",

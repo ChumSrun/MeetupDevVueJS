@@ -45,6 +45,7 @@
 <script>
 import Carousel from "@/components/Home/Carousel";
 export default {
+  name: "Home",
   inject: ["theme"],
   components: {
     Carousel

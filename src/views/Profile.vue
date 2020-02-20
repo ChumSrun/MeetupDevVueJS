@@ -260,6 +260,7 @@
 <script>
 // import { mapGetters } from "vuex";
 export default {
+  name: "Profile",
   filters: {
     dateFilter1(value) {
       let date = new Date(value).toLocaleString("en-US", {

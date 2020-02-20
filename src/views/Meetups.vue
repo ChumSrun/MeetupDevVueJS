@@ -1,6 +1,7 @@
 <template>
   <div>
     <router-view></router-view>
+
     <h1 class="text-center mt-2">{{ homeTitle }}</h1>
 
     <v-sheet v-if="loading" class="mt-3" :color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`">
@@ -78,6 +79,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  name: "Meetups",
   inject: ["theme"],
   data() {
     return {

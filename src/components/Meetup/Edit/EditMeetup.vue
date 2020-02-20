@@ -137,6 +137,7 @@
 
 <script>
 export default {
+  name: "EditBtn",
   props: {
     meetupData: Object
   },
