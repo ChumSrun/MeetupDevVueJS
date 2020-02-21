@@ -2,7 +2,7 @@
   <v-app style="overflow-x:hidden;">
     <Header />
     <v-content style="margin-top:120px">
-      <keep-alive :include="['Meetups', 'Home', 'CreateMeetup']">
+      <keep-alive :include="['Home', 'CreateMeetup']">
         <router-view></router-view>
       </keep-alive>
     </v-content>

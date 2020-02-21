@@ -15,6 +15,8 @@ export default new Vuex.Store({
     loading: false,
     loadingRouter: false,
     registerLoading: false,
+    profileLoading: false,
+    imagePreUpload: null,
   },
   getters: {
     getRegisterLoadingState(state) {
@@ -49,6 +51,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setProfileLoading(state, payload) {
+      state.profileLoading = payload
+    },
+    setimagePreUpload(state, payload) {
+      state.imagePreUpload = payload;
+    },
     setRegisterLoadingState(state, payload) {
       state.registerLoading = payload;
     },
@@ -113,18 +121,111 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    // updateUserNameToDatabase(context, {
+    //   firstName,
+    //   lastName,
+    //   imageProfileInput,
+    //   occupation
+    // }) {
+    //   let imageUrl;
+    //   firebase.database().ref('users/' + context.getters.getUser.id + "/info/").child(context.getters.getUser.keyInfo).update({
+    //       firstName,
+    //       lastName,
+    //       occupation
+    //     }).then(() => {
+    //       const imageName = imageProfileInput.name;
+    //       const extensionFile = imageName.slice(imageName.lastIndexOf("."));
+    //       return firebase
+    //         .storage()
+    //         .ref("users/" + context.getters.getUser.id + "." + extensionFile)
+    //         .put(imageProfileInput);
+    //     })
+    //     .then(fileData => {
+    //       let fullPath = fileData.metadata.fullPath;
+    //       return firebase
+    //         .storage()
+    //         .ref(fullPath)
+    //         .getDownloadURL();
+    //     })
+    //     .then(url => {
+    //       imageUrl = url;
+    //       return firebase
+    //         .database()
+    //         .ref("users/" + context.getters.getUser.id + "/info/")
+    //         .child(context.getters.getUser.keyInfo)
+    //         .update({
+    //           imageProfileInput: imageUrl
+    //         });
+    //     })
+    //     .then(() => {
+    //       context.commit("setInfoUserName", {
+    //         firstName,
+    //         lastName,
+    //         imageProfileInput,
+    //         occupation
+    //       })
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    //   // context.commit("setInfoUserName", {
+    //   //   firstName,
+    //   //   lastName
+    //   // })
+    // },
+
     async updateUserNameToDatabase(context, {
       firstName,
-      lastName
+      lastName,
+      imageProfileInput,
+      occupation
     }) {
       await firebase.database().ref('users/' + context.getters.getUser.id + "/info/").child(context.getters.getUser.keyInfo).update({
         firstName,
-        lastName
-      });
-      context.commit("setInfoUserName", {
-        firstName,
-        lastName
+        lastName,
+        occupation
       })
+      console.log(imageProfileInput)
+      if (imageProfileInput) {
+        let imageUrl;
+        const imageName = imageProfileInput.name;
+        const extensionFile = imageName.slice(imageName.lastIndexOf("."));
+        const fileData = await firebase
+          .storage()
+          .ref("users/" + context.getters.getUser.id + "." + extensionFile)
+          .put(imageProfileInput);
+        let fullPath = fileData.metadata.fullPath;
+        const url = await firebase
+          .storage()
+          .ref(fullPath)
+          .getDownloadURL();
+        imageUrl = url;
+        await firebase
+          .database()
+          .ref("users/" + context.getters.getUser.id + "/info/")
+          .child(context.getters.getUser.keyInfo)
+          .update({
+            imageProfileInput: imageUrl
+          });
+        console.log(imageUrl)
+        context.commit("setInfoUserName", {
+          firstName,
+          lastName,
+          imageProfileInput: imageUrl,
+          occupation
+        })
+        context.commit('setProfileLoading', false);
+      } else {
+        context.commit("setInfoUserName", {
+          firstName,
+          lastName,
+          occupation
+        })
+        context.commit('setProfileLoading', false);
+
+      }
+
+
     },
     async registerMeetup(context, payload) {
       context.commit("setRegisterLoadingState", true);
@@ -283,7 +384,9 @@ export default new Vuex.Store({
       email,
       password,
       firstName,
-      lastName
+      lastName,
+      occupation,
+      imageProfileInput,
     }) {
       context.commit("setLoading", true);
       firebase
@@ -296,7 +399,9 @@ export default new Vuex.Store({
             .ref("users/" + user.user.uid + "/info")
             .push({
               firstName,
-              lastName
+              lastName,
+              occupation,
+              imageProfileInput,
             })
             .then((data) => {
               let keyInfo = data.key;
@@ -307,6 +412,8 @@ export default new Vuex.Store({
                 info: {
                   firstName,
                   lastName,
+                  occupation,
+                  imageProfileInput,
                   keyInfo: data.key
                 }
               };

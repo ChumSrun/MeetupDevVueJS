@@ -29,13 +29,11 @@
         <router-link to="./profile" tag="span" style="cursor: pointer">
           <v-list-item two-line>
             <v-list-item-avatar>
-              <img
-                src="https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg"
-              />
+              <img :src="imageComputed" />
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title>{{getUserInfo.info.firstName}} {{getUserInfo.info.lastName}}</v-list-item-title>
+              <v-list-item-title>{{"Something"&&getUserInfo.info.firstName}} {{getUserInfo.info.lastName||"Wrong"}}</v-list-item-title>
               <v-list-item-subtitle>Logged In</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -96,6 +94,12 @@ export default {
     }
   },
   computed: {
+    imageComputed() {
+      return (
+        this.$store.state.imagePreUpload ||
+        this.$store.state.user.info.imageProfileInput
+      );
+    },
     statusLoadingRoute() {
       return this.$store.getters.getLoadingRouter;
     },

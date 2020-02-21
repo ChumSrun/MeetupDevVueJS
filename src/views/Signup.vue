@@ -162,7 +162,10 @@ export default {
         email: this.email.trim(),
         password: this.submitablePassword,
         firstName: this.firstName,
-        lastName: this.lastName
+        lastName: this.lastName,
+        occupation: "Computer Science",
+        imageProfileInput:
+          "https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg"
       };
       this.$store.dispatch("signUpNewUser", newUser);
     },

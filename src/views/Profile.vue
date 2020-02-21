@@ -4,7 +4,14 @@
       <v-row>
         <v-col cols="12" md="10" offset-md="1">
           <v-row>
-            <v-col cols="12" xl="5" class="text-center">
+            <v-col cols="12" xl="5" class="text-center" v-if="$store.state.profileLoading">
+              <v-sheet class="mt-3" :color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`">
+                <v-container>
+                  <v-skeleton-loader class="mx-auto" type="image, paragraph"></v-skeleton-loader>
+                </v-container>
+              </v-sheet>
+            </v-col>
+            <v-col cols="12" xl="5" class="text-center" v-else>
               <h1 class="mb-7 mt-n7">User Profile</h1>
               <v-img
                 src="https://firebasestorage.googleapis.com/v0/b/meetupdevvuejs.appspot.com/o/meetups%2Fastronomy-1867616__340.jpg?alt=media&token=b9a0db5f-c5e0-4c08-aded-29bb8a8b3dab"
@@ -48,6 +55,24 @@
                               required
                             ></v-text-field>
                           </v-col>
+                          <v-col cols="12">
+                            <v-text-field
+                              label="Occupation"
+                              outlined
+                              :rules="ruleInput"
+                              v-model="occupation"
+                              required
+                            ></v-text-field>
+                          </v-col>
+                          <v-file-input
+                            v-model="imageProfileInput"
+                            color="deep-purple accent-4"
+                            show-size
+                            prepend-icon="mdi-camera"
+                            outlined
+                            label="Update Your Profile Image?"
+                            placeholder="Select your image"
+                          ></v-file-input>
                         </v-row>
                       </v-container>
                     </v-card-text>
@@ -67,15 +92,16 @@
 
                 <v-avatar size="208" class="mx-auto d-block">
                   <v-img
-                    src="https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg"
+                    :src="imageComputed||'https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg'"
                   ></v-img>
                 </v-avatar>
                 <h1
                   class="display-2 mt-5 mb-1"
                 >{{getAllDataUser.info.firstName}} {{getAllDataUser.info.lastName}}</h1>
-                <p class="title mb-0">Computer Science</p>
+                <p class="title mb-0">{{getAllDataUser.info.occupation||"Computer Science"}}</p>
               </v-img>
             </v-col>
+
             <v-col cols="12" xl="7">
               <v-row>
                 <v-col cols="12" class="ml-5">
@@ -261,6 +287,7 @@
 // import { mapGetters } from "vuex";
 export default {
   name: "Profile",
+  inject: ["theme"],
   filters: {
     dateFilter1(value) {
       let date = new Date(value).toLocaleString("en-US", {
@@ -280,10 +307,23 @@ export default {
       allMeetup: false,
       minRegisteredMeetupLenght: 2,
       minCreatedMeetupLength: 2,
+      occupation: this.$store.state.user.info.occupation || "Computer Science",
+      imageProfileInput: null,
+      imagePreUpload: null,
       ruleInput: [value => !!value || "Required."]
     };
   },
   computed: {
+    imageComputed() {
+      console.log(
+        this.imagePreUpload,
+        this.$store.state.user.info.imageProfileInput
+      );
+      return (
+        this.$store.state.imagePreUpload ||
+        this.$store.state.user.info.imageProfileInput
+      );
+    },
     getAllDataUser() {
       return this.$store.getters.getUser;
     },
@@ -318,10 +358,25 @@ export default {
   },
   methods: {
     updateUserName() {
-      // console.log({ firstName: this.firstName, lastName: this.lastName });
+      this.$store.commit("setProfileLoading", true);
+      if (this.imageProfileInput) {
+        const fileName = this.imageProfileInput.name;
+        if (fileName.lastIndexOf(".") <= 0) {
+          return alert("Somthing went wrong!");
+        }
+        const fileReader = new FileReader();
+        fileReader.addEventListener("load", () => {
+          this.imagePreUpload = fileReader.result;
+          this.$store.commit("setimagePreUpload", this.imagePreUpload);
+        });
+        fileReader.readAsDataURL(this.imageProfileInput);
+      }
+
       this.$store.dispatch("updateUserNameToDatabase", {
         firstName: this.firstName,
-        lastName: this.lastName
+        lastName: this.lastName,
+        imageProfileInput: this.imageProfileInput,
+        occupation: this.occupation
       });
       this.dialogEdit = false;
     },
