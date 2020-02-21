@@ -37,7 +37,7 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="6">
+                          <v-col cols="6" class="mb-n5">
                             <v-text-field
                               outlined
                               label="First Name"
@@ -46,7 +46,7 @@
                               required
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="6">
+                          <v-col cols="6" class="mb-n5">
                             <v-text-field
                               label="Last Name"
                               outlined
@@ -91,9 +91,7 @@
                 <!-- form edit dialog -->
 
                 <v-avatar size="208" class="mx-auto d-block">
-                  <v-img
-                    :src="imageComputed||'https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg'"
-                  ></v-img>
+                  <v-img :src="getAllDataUser.info.imageProfileInput"></v-img>
                 </v-avatar>
                 <h1
                   class="display-2 mt-5 mb-1"
@@ -309,21 +307,11 @@ export default {
       minCreatedMeetupLength: 2,
       occupation: this.$store.state.user.info.occupation || "Computer Science",
       imageProfileInput: null,
-      imagePreUpload: null,
+
       ruleInput: [value => !!value || "Required."]
     };
   },
   computed: {
-    imageComputed() {
-      console.log(
-        this.imagePreUpload,
-        this.$store.state.user.info.imageProfileInput
-      );
-      return (
-        this.$store.state.imagePreUpload ||
-        this.$store.state.user.info.imageProfileInput
-      );
-    },
     getAllDataUser() {
       return this.$store.getters.getUser;
     },
@@ -366,8 +354,7 @@ export default {
         }
         const fileReader = new FileReader();
         fileReader.addEventListener("load", () => {
-          this.imagePreUpload = fileReader.result;
-          this.$store.commit("setimagePreUpload", this.imagePreUpload);
+          this.imageProfileInput = fileReader.result;
         });
         fileReader.readAsDataURL(this.imageProfileInput);
       }

@@ -100,6 +100,7 @@
                 v-model="dataUpdate.description"
                 append-icon="mdi-email-outline"
                 name="input-7-4"
+                rows="3"
                 :rules="[rulesInput.required]"
                 label="Description"
               ></v-textarea>

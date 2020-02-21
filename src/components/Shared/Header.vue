@@ -29,7 +29,7 @@
         <router-link to="./profile" tag="span" style="cursor: pointer">
           <v-list-item two-line>
             <v-list-item-avatar>
-              <img :src="imageComputed" />
+              <img :src="getUserInfo.info.imageProfileInput" />
             </v-list-item-avatar>
 
             <v-list-item-content>
@@ -94,12 +94,6 @@ export default {
     }
   },
   computed: {
-    imageComputed() {
-      return (
-        this.$store.state.imagePreUpload ||
-        this.$store.state.user.info.imageProfileInput
-      );
-    },
     statusLoadingRoute() {
       return this.$store.getters.getLoadingRouter;
     },
