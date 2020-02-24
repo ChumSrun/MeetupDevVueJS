@@ -140,8 +140,10 @@
 export default {
   name: "EditBtn",
   props: {
-    meetupData: Object
+    meetupData: Object,
+    title: String
   },
+
   data() {
     return {
       dialogDeleteBtn: "",
@@ -153,6 +155,7 @@ export default {
       rulesInput: {
         required: value => !!value || "Required."
       },
+      updateDataInput: null,
       dataUpdate: {
         title: this.meetupData.title,
         location: this.meetupData.location,

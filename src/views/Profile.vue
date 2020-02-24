@@ -14,7 +14,7 @@
             <v-col cols="12" xl="5" class="text-center" v-else>
               <h1 class="mb-7 mt-n7">User Profile</h1>
               <v-img
-                src="https://firebasestorage.googleapis.com/v0/b/meetupdevvuejs.appspot.com/o/meetups%2Fastronomy-1867616__340.jpg?alt=media&token=b9a0db5f-c5e0-4c08-aded-29bb8a8b3dab"
+                src="https://firebasestorage.googleapis.com/v0/b/meetupdevvuejs.appspot.com/o/meetups%2Fastronomy-1867616__340.jpg?alt=media&token=640bac09-03a5-4430-9930-36ba630be96e"
                 class="white--text py-10 d-flex justify-center align-center"
                 max-height="500px"
               >

@@ -6,6 +6,7 @@
     delimiter-icon="mdi-minus"
     light
     cycle
+    :height="resizeComputed"
   >
     <v-carousel-item
       v-for="(item, index) in featureMeetups"
@@ -22,7 +23,10 @@
 import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["featureMeetups"])
+    ...mapGetters(["featureMeetups"]),
+    resizeComputed() {
+      return this.$vuetify.breakpoint.name == "xs" ? "350" : "500";
+    }
   }
 };
 </script>

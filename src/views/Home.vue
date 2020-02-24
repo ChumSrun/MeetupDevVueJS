@@ -3,7 +3,7 @@
     <v-row v-if="loading">
       <v-col cols="12" md="8" offset-md="2">
         <v-sheet :color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`" class="px-3 pt-3 pb-3">
-          <v-skeleton-loader class="mx-auto" type="card, image"></v-skeleton-loader>
+          <v-skeleton-loader class="mx-auto" type="card, image" :height="resizeComputed"></v-skeleton-loader>
         </v-sheet>
       </v-col>
     </v-row>
@@ -51,6 +51,9 @@ export default {
     Carousel
   },
   computed: {
+    resizeComputed() {
+      return this.$vuetify.breakpoint.name == "xs" ? "350" : null;
+    },
     loading() {
       return this.$store.getters.getLoading;
     }

@@ -48,7 +48,7 @@
 
                 <div class="pr-4 mb-n2 ml-auto">
                   <v-card-actions>
-                    <EditBtn v-if="meetup.userId == getUserId" :meetupData="meetup"></EditBtn>
+                    <EditBtn v-if="meetup.userId == getUserId" :title="title" :meetupData="meetup"></EditBtn>
 
                     <v-btn
                       :loading="registerLoading"
